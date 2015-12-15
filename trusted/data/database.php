@@ -54,6 +54,9 @@ class TDataBase {
         $this->db->close();
     }
     
+    /**
+     * Экранирует символы
+     */
     function EscapeString($text){
         return $this->db->escape_string($text);
     }
@@ -71,8 +74,8 @@ class TDataBase {
      */
     function Query($sql, $ignore_errors = false, $error_position = "", $Options = array()) {
         debug("TDataBase.Query: SQL", $sql);
-        $res = new TDBResult($this->db->query($sql));
-        debug("TDataBase::Query: TDBResult", $res);
+        $res = new TDataBaseResult($this->db->query($sql));
+        debug("TDataBase::Query: TDataBaseResult", $res);
         if ($this->db->errno){
             $message = "TDataBase.Query: Error".$this->LastError();
             debug($message);

@@ -1,6 +1,6 @@
 <?php
 
-class TDBResult {
+class TDataBaseResult {
 
     /**
      *
@@ -13,11 +13,11 @@ class TDBResult {
     }
 
     /**
-     * Делает выборку значений полей в массив.
+     * Представляет данные в виде ассоциативного массива
      */
     function Fetch() {
         $res = $this->data->fetch_assoc();
-        debug("TDBResult::Fetch:", $res);
+        debug("TDataBaseResult::Fetch:", $res);
         return $res;
     }
 

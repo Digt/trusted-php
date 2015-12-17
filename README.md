@@ -1,8 +1,8 @@
 # trusted-php
 
 ## Устанока
-- Скачать архив [url](http://yeandex.ru)
-- Распаковать архив `НАЗВАНИЕ АРХИВА` на `WEB` сервере.
+- Скачать архив [trusted-php.zip](https://github.com/Digt/trusted-php/archive/master.zip)
+- Распаковать архив `trusted-php.zip` на `WEB` сервере.
 
 ## Настройка
 - Зарегистрировать сайт на сервисе [net.trusted.ru](https://net.trusted.ru)

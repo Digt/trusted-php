@@ -466,7 +466,7 @@ class TUser {
         return $res;
     }
 
-    function setServiceUSer($serviceUser) {
+    function setServiceUser($serviceUser) {
         $this->serviceUser = $serviceUser;
         $this->id = $serviceUser->getId();
     }

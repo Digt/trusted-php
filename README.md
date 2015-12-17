@@ -1,8 +1,8 @@
 # trusted-php
 
 ## Устанока
-- Скачать архив [trusted-php.zip](https://github.com/Digt/trusted-php/archive/master.zip)
-- Распаковать архив `trusted-php.zip` на `WEB` сервере.
+- Скачать архив [trusted-php-master.zip](https://github.com/Digt/trusted-php/archive/master.zip)
+- Распаковать архив `trusted-php-master.zip` на `WEB` сервере.
 
 ## Настройка
 - Зарегистрировать сайт на сервисе [net.trusted.ru](https://net.trusted.ru)

@@ -1,6 +1,6 @@
 # trusted-php
 
-## Устанока
+## Установка
 - Скачать архив [trusted-php-master.zip](https://github.com/Digt/trusted-php/archive/master.zip)
 - Распаковать архив `trusted-php-master.zip` на `WEB` сервере.
 

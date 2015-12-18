@@ -205,7 +205,7 @@ class AuthorizationGrant {
 
     protected $client_id = TRUSTED_LOGIN_CLIENT_ID;
     protected $client_secret = TRUSTED_LOGIN_CLIENT_SECRET;
-    protected $redirect_uri = TRUSTEDNET_AUTH_REDIRECT_URI;
+    protected $redirect_uri = TRUSTED_AUTH_REDIRECT_URI;
     protected $grant_type = 'authorization_code';
     protected $code;
 

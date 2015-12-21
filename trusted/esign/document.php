@@ -1206,10 +1206,16 @@ class AjaxSign {
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         $result = curl_exec($curl);
-        if (curl_errno($curl)) {
-            
+        if (!curl_errno($curl)) {
+            $info = curl_getinfo($curl);
+            if ($info['http_code'] == 500) {
+                $result = json_encode(array("success"=>false, "message" => "Баланс приложения равен 0"));
+            }
         } else {
-            
+            $error = curl_error($curl);
+            curl_close($curl);
+            debug("CURL error", $error);
+            throw new Exception("CURL Error", null);
         }
         curl_close($curl);
 
@@ -1221,7 +1227,7 @@ class AjaxSign {
      * @param \DocumentCollection $docs
      * @param \AjaxParams $params
      */
-    static function sendSingRequest($docs, $params = null) {
+    static function sendSignRequest($docs, $params = null) {
         $docsList = $docs->getList();
         $files = array();
         $rToken = AjaxSign::getRefreshToken();
@@ -1369,7 +1375,7 @@ class AjaxSignCommand {
                 $cb($docs, $ajaxParams);
             }
             if ($docs->count()) {
-                $resp = json_decode(AjaxSign::sendSingRequest($docs, $ajaxParams), true);
+                $resp = json_decode(AjaxSign::sendSignRequest($docs, $ajaxParams), true);
 
                 if ($resp["success"] == true) {
                     $res["success"] = true;

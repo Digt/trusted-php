@@ -3,7 +3,6 @@
 
 require_once './trusted/config.php'; //указать путь до настроек модуля
 require_once TRUSTED_MODULE_AUTH;  //подключить сам модуль Trusted.Login
-
 ?>
 
 <!DOCTYPE html>
@@ -21,9 +20,7 @@ require_once TRUSTED_MODULE_AUTH;  //подключить сам модуль Tr
     //Определяем , пользователь авторизовани или нет
     //При успешной авторизации, в сессию добавляется OAuth токен
     $token = OAuth2::getFromSession();//Получаем токен
-    ?>
-    
-    <?
+
     if (!$token) {//Если пользователь не авторизован, показать виджет
     ?>
     
@@ -40,7 +37,8 @@ require_once TRUSTED_MODULE_AUTH;  //подключить сам модуль Tr
           <pre><?print_r ($user->getServiceUser()); //Получить данные о пользователе?></pre>
       </div>
     <?
-    }?>
+    }
+    ?>
     
     <? OAuth2::remove(); // При обновлении страницы завершить сессию?>
  

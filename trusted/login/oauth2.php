@@ -371,8 +371,9 @@ class ServiceUser {
     protected $additionalName;
     protected $familyName;
     protected $givenName;
-    
-    function toArray(){
+    protected $avatarUrl;
+
+    function toArray() {
         return $this->_data;
     }
 
@@ -404,6 +405,10 @@ class ServiceUser {
         return $this->givenName;
     }
 
+    function getAvatarUrl($accessToken) {
+        return $this->avatarUrl . "?access_token=" . $accessToken;
+    }
+
     static function fromArray($array) {
         $res = new ServiceUser();
         $res->_data = $array;
@@ -411,6 +416,14 @@ class ServiceUser {
             $val = $array[$key];
             if (isset($val)) {
                 $value = $val;
+            }
+        }
+        // get avatar
+        $props = $array["properties"];
+        foreach ($props as $key => &$value) {
+            if ($value["type"] == "thumbnailUrl") {
+                $res->avatarUrl = TRUSTED_COMMAND_REST . "/storage/" . $value["value"];
+                break;
             }
         }
         return $res;
@@ -585,6 +598,8 @@ class TAuthCommand {
     }
 
     static function checkTockenExpiration($accessToken) {
+        debug("access token", $accessToken);
+        debug("access token", TRUSTED_COMMAND_URI_USERPROFILE);
         $res = false;
         if ($accessToken) {
             $curl = curl_init();

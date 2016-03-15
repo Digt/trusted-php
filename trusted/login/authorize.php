@@ -29,40 +29,44 @@ function __param($array, $name, $default) {
 
 try {
     if ($code = getParam("code")) {
-        $res = TAuthCommand::getAccessTokenByCode($code);
-        debug("OAuth token from service:", $res);
-        $token = OAuth2::fromArray($res);
-        debug($token);
-        $user_array = TAuthCommand::getUserProfileByToken($token->getAccessToken());
-        debug($user_array);
-        if (TRUSTED_DB) {
-            $user = TDataBaseUser::getUserById($user_array['id']);
-            debug("TDataBaseUser::getUserById:", $user);
-            if ($user) {
-                //Пользователь уже зарегистрирован
-                debug('Old user');
-                if (onRegUserFound) {
-                    debug('Event onRegUserFound');
-                    onRegUserFound($user);
+        if (getParam("final", false)) {
+            $res = TAuthCommand::getAccessTokenByCode($code);
+            debug("OAuth token from service:", $res);
+            $token = OAuth2::fromArray($res);
+            debug($token);
+            $user_array = TAuthCommand::getUserProfileByToken($token->getAccessToken());
+            debug($user_array);
+            if (TRUSTED_DB) {
+                $user = TDataBaseUser::getUserById($user_array['id']);
+                debug("TDataBaseUser::getUserById:", $user);
+                if ($user) {
+                    //Пользователь уже зарегистрирован
+                    debug('Old user');
+                    if (onRegUserFound) {
+                        debug('Event onRegUserFound');
+                        onRegUserFound($user);
+                    }
+                } else {
+                    //Пользователь не найден
+                    debug('New user');
+                    $user = TUser::fromArray($user_array);
+                    if (onBeforeUserInsert) {
+                        debug('Event onBeforeUserInsert');
+                        onBeforeUserInsert($user);
+                    }
+                    $user->save();
                 }
-            } else {
-                //Пользователь не найден
-                debug('New user');
-                $user = TUser::fromArray($user_array);
-                if (onBeforeUserInsert) {
-                    debug('Event onBeforeUserInsert');
-                    onBeforeUserInsert($user);
-                }
-                $user->save();
             }
+            $token->setUser($user);
+            debug('Token', $token);
+            if (onUserAuthorized) {
+                debug('Event onUserAuthorized');
+                onUserAuthorized($user);
+            }
+            header("Location: " . TRUSTED_AUTHORIZED_REDIRECT);
+        } else {
+            include_once("./widget.tpl");
         }
-        $token->setUser($user);
-        debug('Token', $token);
-        if (onUserAuthorized) {
-            debug('Event onUserAuthorized');
-            onUserAuthorized($user);
-        }
-        header("Location: " . TRUSTED_AUTHORIZED_REDIRECT);
     } else {
         $token = OAuth2::getFromSession();
         if (!$token) {

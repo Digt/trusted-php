@@ -62,10 +62,12 @@ class OAuth2 {
     function getUser() {
         if (!$this->user) {
             $array = TAuthCommand::getUserProfileByToken($this->access_token);
+            // TODO: Ошибка если пользователь данные о пользователе не получены
             $user = TUser::fromArray($array);
             $this->setUser($user);
             $this->putToSession();
         }
+        // print_r($array);
         return $this->user;
     }
 
@@ -426,6 +428,9 @@ class ServiceUser {
                 break;
             }
         }
+        if (!$res->avatarUrl){
+            $res->avatarUrl = TRUSTED_COMMAND_URI_HOST . "/static/new/img/ava.jpg";
+        }
         return $res;
     }
 
@@ -538,19 +543,21 @@ class TAuthCommand {
         $url = TRUSTED_COMMAND_URI_TOKEN;
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        curl_setopt($curl, CURLOPT_USERPWD, $AG->getClientId() . ':' . $AG->getClientSecret()); //Your credentials goes here
+        curl_setopt($curl, CURLOPT_USERPWD, $AG->getClientId() . ':' . $AG->getClientSecret());
 
         curl_setopt($curl, CURLOPT_URL, $url);
         debug("CURL url:", $url);
-        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POST, true);
         $post_fields = urldecode(http_build_query($params));
         curl_setopt($curl, CURLOPT_POSTFIELDS, $post_fields);
         debug("CURL post fields:", $post_fields);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_SSLVERSION, TRUSTED_SSL_VERSION); 
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false); 
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); 
         $response = curl_exec($curl);
         $res = TAuthCommand::getToken($curl, $response);
-
         return $res;
     }
 
@@ -563,12 +570,14 @@ class TAuthCommand {
         $url = TRUSTED_COMMAND_URI_TOKEN;
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        curl_setopt($curl, CURLOPT_USERPWD, TRUSTED_LOGIN_CLIENT_ID . ':' . TRUSTED_LOGIN_CLIENT_SECRET); //Your credentials goes here
+        curl_setopt($curl, CURLOPT_USERPWD, TRUSTED_LOGIN_CLIENT_ID . ':' . TRUSTED_LOGIN_CLIENT_SECRET);
 
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_POST, 1);
         curl_setopt($curl, CURLOPT_POSTFIELDS, urldecode(http_build_query($params)));
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_SSLVERSION, TRUSTED_SSL_VERSION); 
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         $response = curl_exec($curl);
         $res = TAuthCommand::getToken($curl, $response);
@@ -585,9 +594,34 @@ class TAuthCommand {
             curl_setopt($curl, CURLOPT_URL, TRUSTED_COMMAND_URI_USERPROFILE);
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET');
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_SSLVERSION, TRUSTED_SSL_VERSION); 
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
             $result = curl_exec($curl);
+            if (!curl_errno($curl)) {
+                $info = curl_getinfo($curl);
+                if ($info['http_code'] == 200) {
+                    $res = json_decode($response, true);
+                } else {
+                    $message = "Wrong HTTP response status " . $info['http_code'];
+                    if ($response) {
+                        $error = json_decode($response, true);
+                        if ($error) {
+                            $message .= PHP_EOL . $error["error"] . " - " . $error["error_description"];
+                        }
+                    }
+                    debug("OAuth request error", $message);
+                    throw new OAuth2Exception($message, 0, null);
+                }
+            }
+            else{
+                $error = curl_error($curl);
+                curl_close($curl);
+                debug("CURL error", $error);
+                throw new OAuth2Exception(TRUSTEDNET_ERROR_MSG_CURL, TRUSTEDNET_ERROR_CODE_CURL, null);
+            }
             curl_close($curl);
+            // TODO: wrong $result
             $response = json_decode($result, true);
         }
         $res = null;
@@ -599,14 +633,16 @@ class TAuthCommand {
 
     static function checkTockenExpiration($accessToken) {
         debug("access token", $accessToken);
-        debug("access token", TRUSTED_COMMAND_URI_USERPROFILE);
         $res = false;
         if ($accessToken) {
             $curl = curl_init();
-            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $accessToken));
-            curl_setopt($curl, CURLOPT_URL, TRUSTED_COMMAND_URI_USERPROFILE);
+            curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            curl_setopt($curl, CURLOPT_USERPWD, TRUSTED_LOGIN_CLIENT_ID . ':' . TRUSTED_LOGIN_CLIENT_SECRET);
+            curl_setopt($curl, CURLOPT_URL, TRUSTED_COMMAND_URI_CHECK_TOKEN . "?token=" . $accessToken);
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET');
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_SSLVERSION, TRUSTED_SSL_VERSION); 
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
             $result = curl_exec($curl);
             if (!curl_errno($curl)) {
@@ -614,7 +650,7 @@ class TAuthCommand {
                 curl_close($curl);
                 if ($info['http_code'] == 200) {
                     $res = true;
-                } else if ($info['http_code'] == 401) {
+                } else if ($info['http_code'] == 400) {
                     $res = false;
                 } else {
                     $message = "Wrong HTTP response status " . $info['http_code'];

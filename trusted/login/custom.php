@@ -30,10 +30,8 @@ function onUserAuthorized($user) {
  * @param \OAuth2Exception $e
  */
 function onOAuth2Exception($e) {
-    echo "onOAuth2Exception" . PHP_EOL;
-    echo $e . message . PHP_EOL;
-    unset($_SESSION['TRUSTEDNET']);
-    die();
+    //Ваш код здесь
+    onException($e);
 }
 
 /**
@@ -41,8 +39,11 @@ function onOAuth2Exception($e) {
  * @param \Exception $e
  */
 function onException($e) {
-    echo "onException" . PHP_EOL;
-    echo $e . message . PHP_EOL;
+    //Ваш код здесь
     unset($_SESSION['TRUSTEDNET']);
+    $tpl = file_get_contents(TRUSTED_MODULE_ROOT. "/../error.php");
+    $message = "onOAuth2Exception" . PHP_EOL . $e . PHP_EOL;    
+    $tpl2 = str_replace('${message}', $message, $tpl);
+    echo($tpl2);
     die();
 }

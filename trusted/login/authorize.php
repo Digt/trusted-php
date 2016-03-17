@@ -77,14 +77,12 @@ try {
         debug("Token", $token);
     }
 } catch (OAuth2Exception $e) {
-    echo "Error OAuth2Exception" . PHP_EOL;
     if (onOAuth2Exception) {
         onOAuth2Exception($e);
     }
     debug("OAuth2Exception: " . $e->getMessage());
     debug($e->getTrace());
 } catch (Exception $e) {
-    echo "Error Exception" . PHP_EOL;
     if (Exception) {
         onException($e);
     }

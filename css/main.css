@@ -1,0 +1,21 @@
+.profile {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+}
+.profile>*{
+    margin: 0 10px;
+}
+body{
+    background-color: #efefef;
+}
+h1{
+    text-align: center; 
+}
+.page{
+    max-width: 475px;
+    margin: 0 auto;
+}
+.view-contaier{
+    padding: 20px 0;    
+}

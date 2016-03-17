@@ -5,6 +5,7 @@ require_once (__DIR__ . '/../config.php');
 //TrustedNet URI
 define('TRUSTED_COMMAND_URI_OAUTH', TRUSTED_COMMAND_URI_HOST . '/idp/sso/oauth');
 define('TRUSTED_COMMAND_URI_TOKEN', TRUSTED_COMMAND_URI_OAUTH . "/token");
+define('TRUSTED_COMMAND_URI_CHECK_TOKEN', TRUSTED_COMMAND_URI_OAUTH . "/check_token");
 define('TRUSTED_COMMAND_URI_LOGOUT', TRUSTED_COMMAND_URI_OAUTH . '/authorize/logout');
 define('TRUSTED_COMMAND_URI_USERPROFILE', TRUSTED_COMMAND_URI_HOST . '/trustedapp/rest/person/profile/get');
 

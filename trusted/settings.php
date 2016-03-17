@@ -4,6 +4,8 @@
 
 define("TRUSTED_DEBUG", false);
 
+define("TRUSTED_SSL_VERSION", 0);
+
 /* ===== Database ===== */
 // Использовать базу данных
 define("TRUSTED_DB", false);
@@ -24,7 +26,7 @@ define('TRUSTED_MODULE_PATH', '/trusted');
 
 /* ===== Login ===== */
 // Учетные данные приложения trusted.login
-define("TRUSTED_LOGIN_CLIENT_ID", "995134bae1b5e45a447502778007f9f6");
-define("TRUSTED_LOGIN_CLIENT_SECRET", "secret");
+define("TRUSTED_LOGIN_CLIENT_ID", "client id");
+define("TRUSTED_LOGIN_CLIENT_SECRET", "client secret");
 // Путь перехода после успешной аутентификации
-define("TRUSTED_AUTHORIZED_REDIRECT", "index.php");
+define("TRUSTED_AUTHORIZED_REDIRECT", "../../index.php");

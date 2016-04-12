@@ -15,11 +15,6 @@
   - Задать параметры для доступа к базе данных
 - Выполнить `SQL` скрипты для формирования таблиц данных ([login.sql](https://github.com/Digt/trusted-php/blob/master/trusted/login/sql/install.sql), [esign.sql](https://github.com/Digt/trusted-php/blob/master/trusted/esign/sql/install.sql))
 
-## Установка клиентского приложения
-
-- Скачать дистрибутив [trusted](https://net.trusted.ru/trustedapp/app/trustednet-client)
-- Установить клиентское приложение `trusted`
-
 ---
 
 ## Installing
@@ -36,11 +31,6 @@
   - Set parameters `TRUSTED_LOGIN_CLIENT_ID` and `TRUSTED_LOGIN_CLIENT_SECRET`
   - Set Database connection parameters
 - Run `SQL` script to create required Database tables ([login.sql](https://github.com/Digt/trusted-php/blob/master/trusted/login/sql/install.sql), [esign.sql](https://github.com/Digt/trusted-php/blob/master/trusted/esign/sql/install.sql))
-
-## Installing client software
-
-- Download distribution [trusted](https://net.trusted.ru/trustedapp/app/trustednet-client)
-- Setup application `trusted` using Wizard
 
 ---
 

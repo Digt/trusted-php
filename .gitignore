@@ -1,4 +1,4 @@
 /font
-/css/tlogin.css
-/src/tlogin.js
+/css/tlogin*.css
+/js/tlogin*.js
 /nbproject/private/

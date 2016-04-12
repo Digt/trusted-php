@@ -1362,13 +1362,15 @@ class AjaxSignCommand {
             $docs = new DocumentCollection();
             foreach ($docsId as &$id) {
                 $doc = TDataBaseDocument::getDocumentById($id);
-                $lastDoc = $doc->getLastDocument();
-                //Проверка статуса Документа. Если Документ имеет статус "В процессе", то вернуть пользователю ошибку
-                if ($lastDoc->getStatus() && $lastDoc->getStatus()->getValue() == DOCUMENT_STATUS_PROCESSING) {
-                    $res["message"] = "Один из документов был отправлен на подпись. Повторите попытку позже.";
-                    return $res;
+                if($doc!==null) {
+                    $lastDoc = $doc->getLastDocument();
+                    //Проверка статуса Документа. Если Документ имеет статус "В процессе", то вернуть пользователю ошибку
+                    if ($lastDoc->getStatus() && $lastDoc->getStatus()->getValue() == DOCUMENT_STATUS_PROCESSING) {
+                        $res["message"] = "Один из документов был отправлен на подпись. Повторите попытку позже.";
+                        return $res;
+                    }
+                    $docs->add($lastDoc);
                 }
-                $docs->add($lastDoc);
             }
             $ajaxParams = AjaxParams::fromArray($params);
             if ($cb) {

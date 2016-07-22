@@ -21,7 +21,7 @@ define("TRUSTED_DB_PASSWORD", "root");
 
 /* ===== Module trustednet ===== */
 // Путь к модулю trustednet
-define('TRUSTED_MODULE_PATH', '/login/trusted');
+define('TRUSTED_MODULE_PATH', '/trusted');
 
 
 /* ===== Login ===== */

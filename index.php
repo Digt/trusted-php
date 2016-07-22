@@ -4,7 +4,7 @@
 require_once './trusted/config.php'; //указать путь до настроек модуля
 require_once TRUSTED_MODULE_AUTH;  //подключить сам модуль Trusted.Login
 
-if (true){
+if (false){
     define("TRUSTED_LOGIN_PLUGIN_PATH", "https://net.trusted.ru/static/");
 }
 else{
@@ -17,7 +17,7 @@ else{
     <head>
         <meta charset="utf-8" />
         <title></title>
-        <link rel="stylesheet" href="<?=TRUSTED_LOGIN_PLUGIN_PATH?>css/tlogin-2.0.1.css">
+        <link rel="stylesheet" href="<?=TRUSTED_LOGIN_PLUGIN_PATH?>css/tlogin-2.0.2.css">
         <link rel="stylesheet" href="css/main.css">
     </head>
     <body>

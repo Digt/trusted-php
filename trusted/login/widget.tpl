@@ -42,8 +42,11 @@
                 if (window.opener) {
                     // Edge не имеет свойство opener
                     window.opener.location.href = "<?php echo TRUSTED_AUTH_REDIRECT_URI?>?final=true&code=" + code;
+                    window.close();
                 }
-                window.close();
+                else {
+                    window.location.href = "<?php echo TRUSTED_AUTH_REDIRECT_URI?>?final=true&code=" + code;
+                }
             }
             catch (e) {
                 window.document.writeln("<h3>Trusted ligin frame: " + e.message + "</h3>");
@@ -52,5 +55,6 @@
                 window.document.writeln("</pre>");
             }
         </script>
+	<h1>Если вы видите это сообщение, то что-то пошло не так</h1>
     </body>
 </html>

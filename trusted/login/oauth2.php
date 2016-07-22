@@ -543,8 +543,7 @@ class TAuthCommand {
         $url = TRUSTED_COMMAND_URI_TOKEN;
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        curl_setopt($curl, CURLOPT_USERPWD, $AG->getClientId() . ':' . $AG->getClientSecret());
-
+        curl_setopt($curl, CURLOPT_USERPWD, $AG->getClientId() . ':' . $AG->getClientSecret());
         curl_setopt($curl, CURLOPT_URL, $url);
         debug("CURL url:", $url);
         curl_setopt($curl, CURLOPT_POST, true);

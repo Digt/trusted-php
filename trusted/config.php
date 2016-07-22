@@ -27,4 +27,4 @@ define('TRUSTED_MODULE_SIGN_PATH', '/esign');
 define('TRUSTED_MODULE_SIGN_ROOT', TRUSTED_MODULE_ROOT . TRUSTED_MODULE_SIGN_PATH);
 define('TRUSTED_MODULE_SIGN', TRUSTED_MODULE_SIGN_ROOT . '/common.php');
 
-require(TRUSTED_MODULE_ROOT . '/util.php');
+require(__DIR__ . '/util.php');

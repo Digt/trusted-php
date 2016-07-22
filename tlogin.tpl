@@ -18,4 +18,4 @@
         window.location.href = "<?php echo TRUSTED_AUTH_WIDGET_REDIRECT_URI ?>";
     };
 </script>
-<script src="<?=TRUSTED_LOGIN_PLUGIN_PATH?>js/tlogin-2.0.2.js"></script>
+<script src="<?=TRUSTED_LOGIN_PLUGIN_PATH?>src/tlogin-2.0.2.js"></script>

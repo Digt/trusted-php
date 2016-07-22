@@ -3,13 +3,7 @@
 
 require_once './trusted/config.php'; //указать путь до настроек модуля
 require_once TRUSTED_MODULE_AUTH;  //подключить сам модуль Trusted.Login
-
-if (false){
-    define("TRUSTED_LOGIN_PLUGIN_PATH", "https://net.trusted.ru/static/");
-}
-else{
-    define("TRUSTED_LOGIN_PLUGIN_PATH", "");
-}
+define("TRUSTED_LOGIN_PLUGIN_PATH", "https://net.trusted.ru/static/");
 ?>
 
 <!DOCTYPE html>
